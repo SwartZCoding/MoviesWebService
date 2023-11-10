@@ -1,6 +1,6 @@
 import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import {rules} from "@adonisjs/validator/build/src/Rules";
+import { rules } from "@adonisjs/validator/build/src/Rules";
 
 export default class EditMovieValidator {
   constructor(protected ctx: HttpContextContract) {}
@@ -12,5 +12,7 @@ export default class EditMovieValidator {
     releaseDate: schema.date.optional( { format: 'yyyy-MM-dd' } ),
   })
 
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+
+  };
 }
