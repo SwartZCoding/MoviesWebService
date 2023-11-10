@@ -23,6 +23,9 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   Route.get('all', 'MoviesController.getAllMovies');
   Route.get('/:name', 'MoviesController.getMovieByName');
+  Route.post('/:name', 'MoviesController.createMovie');
+  Route.patch('/:name', 'MoviesController.editMovie');
+  Route.delete('/:name', 'MoviesController.removeMovie');
 }).prefix('movie')
 
 
