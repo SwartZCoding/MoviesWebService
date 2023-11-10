@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Movie from "App/Models/Movie";
+import CreateMovieValidator from "App/Validators/CreateMovieValidator";
 
 export default class MoviesController {
 
@@ -32,7 +33,16 @@ export default class MoviesController {
   }
 
   public async createMovie({ request, response } : HttpContextContract) {
-
+    const movie = await request.validate(CreateMovieValidator);
+    try {
+      if(movie){
+        await Movie.create(movie);
+        return response.created(movie);
+      }
+    } catch (error) {
+      console.error(error.message);
+      return response.internalServerError({ message: 'Erreur serveur lors de la création du film' })
+    }
   }
 
   public async removeMovie({ params, response } : HttpContextContract) {
