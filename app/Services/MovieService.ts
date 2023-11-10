@@ -49,4 +49,34 @@ export default class MovieService {
       return response.badRequest({ error: error.messages });
     }
   }
+
+  public async getMovieByName(movieName: string, { response } : HttpContextContract) {
+
+    const movie = await Movie.findBy('name', movieName);
+
+    try {
+      if(movie) {
+        return response.ok(movie);
+      } else {
+        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' })
+      }
+    } catch (error) {
+      console.log(error.message)
+      return response.internalServerError({ message: 'Erreur serveur lors de la récupération du film' })
+    }
+  }
+
+  public async getAllMovies({ response } : HttpContextContract) {
+    const movies = await Movie.all();
+    try {
+      if(movies.length >= 1) {
+        return response.ok(movies);
+      } else {
+        return response.notFound({ message: 'Aucun film disponible' })
+      }
+    } catch (error) {
+      console.log(error.message)
+      return response.internalServerError({ message: 'Erreur serveur lors de la récupération des films' })
+    }
+  }
 }

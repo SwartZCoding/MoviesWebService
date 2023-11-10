@@ -12,32 +12,13 @@ export default class MoviesController {
     this.movieService = new MovieService();
   }
 
-  public async getAllMovies ({ response } : HttpContextContract) {
-    const movies = await Movie.all();
-    try {
-      if(movies.length >= 1) {
-        return response.ok(movies);
-      } else {
-        return response.notFound({ message: 'Aucun film disponible' })
-      }
-    } catch (error) {
-      console.log(error.message)
-      return response.internalServerError({ message: 'Erreur serveur lors de la récupération des films' })
-    }
+  public async getAllMovies(httpContextContract: HttpContextContract) {
+    await this.movieService.getAllMovies(httpContextContract);
   }
 
-  public async getMovieByName ({ params, response } : HttpContextContract) {
-    const movie = await Movie.findBy('name', params.name);
-    try {
-      if(movie) {
-        return response.ok(movie);
-      } else {
-        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' })
-      }
-    } catch (error) {
-      console.log(error.message)
-      return response.internalServerError({ message: 'Erreur serveur lors de la récupération du film' })
-    }
+  public async getMovieByName(httpContextContract: HttpContextContract) {
+    const movie = httpContextContract.params.name
+    await this.movieService.getMovieByName(movie, httpContextContract);
   }
 
   public async createMovie(httpContextContract: HttpContextContract) {
