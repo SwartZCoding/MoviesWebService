@@ -20,6 +20,12 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+Route.group(() => {
+  Route.get('/', 'MoviesController.getAllMovies');
+  Route.get('/:name', 'MoviesController.getMovieByName');
+  Route.post('/:name', 'MoviesController.createMovie');
+  Route.patch('/:name', 'MoviesController.editMovie');
+  Route.delete('/:name', 'MoviesController.removeMovie');
+}).prefix('movie')
+
+
