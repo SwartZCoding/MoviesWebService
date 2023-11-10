@@ -29,7 +29,7 @@ export default class CreateMovieValidator {
     name: schema.string([rules.maxLength(128)]),
     description: schema.string([rules.maxLength(2048)]),
     note: schema.number([rules.range(1, 5)]),
-    releaseDate: schema.date( { format: 'yyyy-MM-dd HH:mm:ss' } ),
+    releaseDate: schema.date( { format: 'yyyy-MM-dd' } ),
   })
 
   public messages: CustomMessages = {

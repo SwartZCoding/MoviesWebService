@@ -1,6 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Movie from "App/Models/Movie";
 import CreateMovieValidator from "App/Validators/CreateMovieValidator";
+import {da} from "@faker-js/faker";
+import EditMovieValidator from "App/Validators/EditMovieValidator";
 
 export default class MoviesController {
 
@@ -60,7 +62,22 @@ export default class MoviesController {
     }
   }
 
-  public async editMovie({ request, response } : HttpContextContract) {
+  public async editMovie({ params, request, response } : HttpContextContract) {
+    const movie = await Movie.findBy('name', params.name);
 
+    try {
+      if(movie) {
+
+        const data = await request.validate(EditMovieValidator)
+        await movie.merge(data).save()
+
+        return response.ok({message: 'Film modifié avec succès !', data: movie});
+      } else {
+        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' })
+      }
+    } catch (error) {
+      console.log(error.messages)
+      return response.badRequest({ error: error.messages });
+    }
   }
 }
