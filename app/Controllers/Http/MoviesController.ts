@@ -35,8 +35,19 @@ export default class MoviesController {
 
   }
 
-  public async removeMovie({ request, response } : HttpContextContract) {
-
+  public async removeMovie({ params, response } : HttpContextContract) {
+    const movie = await Movie.findBy('name', params.name);
+    try {
+      if(movie) {
+        await movie.delete();
+        return response.ok({message: 'Film supprimé avec succès !'});
+      } else {
+        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' })
+      }
+    } catch (error) {
+      console.log(error.message)
+      return response.internalServerError({ message: 'Erreur serveur lors de la suppression du film' })
+    }
   }
 
   public async editMovie({ request, response } : HttpContextContract) {
