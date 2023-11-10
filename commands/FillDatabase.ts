@@ -29,7 +29,7 @@ export default class FillDatabase extends BaseCommand {
 
   public async run() {
     const { MovieFactory } = await import('Database/Factories/MovieFactory')
-    await MovieFactory.createMany(100);
+    await MovieFactory.createMany(20);
     this.logger.info('======== BDD done with fake movies ! ========');
   }
 }

@@ -22,6 +22,7 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
   Route.get('all', 'MoviesController.getAllMovies');
+  Route.get('/:name', 'MoviesController.getMovieByName');
 }).prefix('movie')
 
 

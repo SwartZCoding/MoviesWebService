@@ -5,10 +5,41 @@ export default class MoviesController {
 
   public async getAllMovies ({ response } : HttpContextContract) {
     const movies = await Movie.all();
-    if(movies.length >= 1) {
-      response.status(200).json(movies);
-    } else {
-      return response.status(404).json({ message: 'Aucun film disponible' });
+    try {
+      if(movies.length >= 1) {
+        return response.ok(movies);
+      } else {
+        return response.notFound({ message: 'Aucun film disponible' })
+      }
+    } catch (error) {
+      console.log(error.message)
+      return response.internalServerError({ message: 'Erreur serveur lors de la récupération des films' })
     }
+  }
+
+  public async getMovieByName ({ params, response } : HttpContextContract) {
+    const movie = await Movie.findBy('name', params.name);
+    try {
+      if(movie) {
+        return response.ok(movie);
+      } else {
+        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' })
+      }
+    } catch (error) {
+      console.log(error.message)
+      return response.internalServerError({ message: 'Erreur serveur lors de la récupération du film' })
+    }
+  }
+
+  public async createMovie({ request, response } : HttpContextContract) {
+
+  }
+
+  public async removeMovie({ request, response } : HttpContextContract) {
+
+  }
+
+  public async editMovie({ request, response } : HttpContextContract) {
+
   }
 }
