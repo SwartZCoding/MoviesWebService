@@ -50,33 +50,48 @@ export default class MovieService {
     }
   }
 
-  public async getMovieByName(movieName: string, { response } : HttpContextContract) {
-
+  public async getMovieByName(movieName: string, { request, response }: HttpContextContract) {
     const movie = await Movie.findBy('name', movieName);
+    const contentType = request.is(['json', 'xml']);
 
     try {
-      if(movie) {
-        return response.ok(movie);
+      if (movie) {
+        if (contentType === 'json') {
+          return response.ok(movie);
+        } else if (contentType === 'xml') {
+          const xml = `<movie>${movie.toXML()}</movie>`;
+          return response.type('application/xml').send(xml);
+        } else {
+          return response.status(406).send({ message: "Format non pris en compte (json & xml only)"});
+        }
       } else {
-        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' })
+        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' });
       }
     } catch (error) {
-      console.log(error.message)
-      return response.internalServerError({ message: 'Erreur serveur lors de la récupération du film' })
+      console.log(error.message);
+      return response.internalServerError({ message: 'Erreur serveur lors de la récupération du film' });
     }
   }
 
-  public async getAllMovies({ response } : HttpContextContract) {
+  public async getAllMovies({ request, response } : HttpContextContract) {
     const movies = await Movie.all();
-    try {
-      if(movies.length >= 1) {
-        return response.ok(movies);
-      } else {
-        return response.notFound({ message: 'Aucun film disponible' })
+    const contentType = request.is(['json', 'xml'])
+    if(contentType === 'json') {
+      try {
+        if(movies.length >= 1) {
+          return response.ok(movies);
+        } else {
+          return response.notFound({ message: 'Aucun film disponible' })
+        }
+      } catch (error) {
+        console.log(error.message)
+        return response.internalServerError({ message: 'Erreur serveur lors de la récupération des films' })
       }
-    } catch (error) {
-      console.log(error.message)
-      return response.internalServerError({ message: 'Erreur serveur lors de la récupération des films' })
+    } else if(contentType === 'xml') {
+      const xml = `<movies>${movies.map(movie => movie.toXML()).join('')}</movies>`;
+      return response.type('application/xml').send(xml);
+    } else {
+      return response.status(406).send({ message: "Format non pris en compte (json & xml only)"});
     }
   }
 }
