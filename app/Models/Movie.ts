@@ -22,4 +22,18 @@ export default class Movie extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  public toXML(): string {
+    return `
+      <movie>
+        <id>${this.id}</id>
+        <name>${this.name}</name>
+        <description>${this.description}</description>
+        <releaseDate>${this.releaseDate.toISO()}</releaseDate>
+        <note>${this.note}</note>
+        <createdAt>${this.createdAt.toISO()}</createdAt>
+        <updatedAt>${this.updatedAt.toISO()}</updatedAt>
+      </movie>
+    `;
+  }
 }
