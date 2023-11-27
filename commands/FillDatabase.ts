@@ -1,4 +1,5 @@
 import { BaseCommand } from '@adonisjs/core/build/standalone'
+import {CategoryFactory} from "Database/factories/CategoryFactory";
 
 export default class FillDatabase extends BaseCommand {
   /**
@@ -29,6 +30,7 @@ export default class FillDatabase extends BaseCommand {
 
   public async run() {
     const { MovieFactory } = await import('Database/Factories/MovieFactory')
+    await CategoryFactory.createMany(3);
     await MovieFactory.createMany(20);
     this.logger.info('======== BDD done with fake movies ! ========');
   }

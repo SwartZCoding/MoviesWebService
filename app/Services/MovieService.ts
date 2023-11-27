@@ -73,8 +73,38 @@ export default class MovieService {
     }
   }
 
+  public async getMoviesByCategory({ request, response }: HttpContextContract) {
+    const category = request.input('category')
+    const movie = await Movie.query().from('movies').where('category_id', category).select('*');
+    const contentType = request.is(['json', 'xml']);
+
+    try {
+      let xml: string = '';
+      if (movie) {
+        if (contentType === 'json') {
+          return response.ok(movie);
+        } else if (contentType === 'xml') {
+
+          movie.forEach(movie => {
+            xml = `<movie>${movie.toXML()}</movie>`;
+          })
+
+          return response.type('application/xml').send(xml);
+        } else {
+          return response.status(406).send({ message: "Format non pris en compte (json & xml only)"});
+        }
+      } else {
+        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' });
+      }
+    } catch (error) {
+      console.log(error.message);
+      return response.internalServerError({ message: 'Erreur serveur lors de la récupération du film' });
+    }
+  }
+
   public async getAllMovies({ request, response } : HttpContextContract) {
-    const movies = await Movie.all();
+    const page = request.input('page', 1)
+    const movies = await Movie.query().paginate(page, 10);
     const contentType = request.is(['json', 'xml'])
     if(contentType === 'json') {
       try {
