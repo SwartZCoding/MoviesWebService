@@ -11,7 +11,13 @@ npm i
 ```
 Remplacer .env.exemple par .env et compléter les informations SQL
 
-Remplir la base de donnée de données
+Reset et remplir la base de donnée de données
+```
+node ace migration:fresh
+```
+```
+node ace migration:run
+```
 ```
 node ace fill:database
 ```
