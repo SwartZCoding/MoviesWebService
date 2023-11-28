@@ -52,7 +52,8 @@ export default class MovieService {
 
   public async getMovieByName(movieName: string, { request, response }: HttpContextContract) {
     const movie = await Movie.findBy('name', movieName);
-    const contentType = request.is(['json', 'xml']);
+    // Check for /movie?format=xml, else it's json by default
+    const contentType = request.input('format', 'json');
 
     try {
       if (movie) {
@@ -74,9 +75,10 @@ export default class MovieService {
   }
 
   public async getMoviesByCategory({ request, response }: HttpContextContract) {
-    const category = request.input('category')
+    const category = request.input('category');
     const movie = await Movie.query().from('movies').where('category_id', category).select('*');
-    const contentType = request.is(['json', 'xml']);
+    // Check for /movie?format=xml, else it's json by default
+    const contentType = request.input('format', 'json');
 
     try {
       let xml: string = '';
@@ -105,7 +107,8 @@ export default class MovieService {
   public async getAllMovies({ request, response } : HttpContextContract) {
     const page = request.input('page', 1)
     const movies = await Movie.query().paginate(page, 10);
-    const contentType = request.is(['json', 'xml'])
+    // Check for /movie?format=xml, else it's json by default
+    const contentType = request.input('format', 'json');
     if(contentType === 'json') {
       try {
         if(movies.length >= 1) {

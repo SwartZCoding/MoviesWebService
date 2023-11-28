@@ -1,5 +1,5 @@
 import { BaseCommand } from '@adonisjs/core/build/standalone'
-import {CategoryFactory} from "Database/factories/CategoryFactory";
+import { CategoryFactory } from "Database/factories/CategoryFactory";
 
 export default class FillDatabase extends BaseCommand {
   /**
