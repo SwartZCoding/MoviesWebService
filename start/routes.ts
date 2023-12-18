@@ -27,9 +27,16 @@ Route.group(() => {
   Route.post('/:name', 'MoviesController.createMovie');
   Route.patch('/:name', 'MoviesController.editMovie');
   Route.delete('/:name', 'MoviesController.removeMovie');
-}).prefix('movie')
+}).prefix('movie').middleware("auth")
 
 
 Route.group(() => {
   Route.get('/:name', 'CategoriesController.getCategoryMovies');
 }).prefix('category')
+
+Route.group(() => {
+  Route.post('/register', 'AuthController.register');
+  Route.post('/login', 'AuthController.login');
+  Route.post('/logout', 'AuthController.logout').middleware(["auth"]);
+}).prefix('auth')
+
