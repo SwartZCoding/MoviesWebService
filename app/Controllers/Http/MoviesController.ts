@@ -21,6 +21,10 @@ export default class MoviesController {
     await this.movieService.getMovieByName(movie, httpContextContract);
   }
 
+  public async getMoviesByCategory(httpContextContract: HttpContextContract) {
+    await this.movieService.getMoviesByCategory(httpContextContract);
+  }
+
   public async createMovie(httpContextContract: HttpContextContract) {
     const movie = await httpContextContract.request.validate(CreateMovieValidator);
     await this.movieService.createMovie(movie, httpContextContract);

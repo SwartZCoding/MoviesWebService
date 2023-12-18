@@ -52,7 +52,8 @@ export default class MovieService {
 
   public async getMovieByName(movieName: string, { request, response }: HttpContextContract) {
     const movie = await Movie.findBy('name', movieName);
-    const contentType = request.is(['json', 'xml']);
+    // Check for /movie?format=xml, else it's json by default
+    const contentType = request.input('format', 'json');
 
     try {
       if (movie) {
@@ -73,9 +74,41 @@ export default class MovieService {
     }
   }
 
+  public async getMoviesByCategory({ request, response }: HttpContextContract) {
+    const category = request.input('category');
+    const movie = await Movie.query().from('movies').where('category_id', category).select('*');
+    // Check for /movie?format=xml, else it's json by default
+    const contentType = request.input('format', 'json');
+
+    try {
+      let xml: string = '';
+      if (movie) {
+        if (contentType === 'json') {
+          return response.ok(movie);
+        } else if (contentType === 'xml') {
+
+          movie.forEach(movie => {
+            xml = `<movie>${movie.toXML()}</movie>`;
+          })
+
+          return response.type('application/xml').send(xml);
+        } else {
+          return response.status(406).send({ message: "Format non pris en compte (json & xml only)"});
+        }
+      } else {
+        return response.notFound({ message: 'Aucun film avec ce nom est disponible.' });
+      }
+    } catch (error) {
+      console.log(error.message);
+      return response.internalServerError({ message: 'Erreur serveur lors de la récupération du film' });
+    }
+  }
+
   public async getAllMovies({ request, response } : HttpContextContract) {
-    const movies = await Movie.all();
-    const contentType = request.is(['json', 'xml'])
+    const page = request.input('page', 1)
+    const movies = await Movie.query().paginate(page, 10);
+    // Check for /movie?format=xml, else it's json by default
+    const contentType = request.input('format', 'json');
     if(contentType === 'json') {
       try {
         if(movies.length >= 1) {

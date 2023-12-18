@@ -1,15 +1,12 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'movies'
+  protected tableName = 'categories'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('name', 128).notNullable().unique();
-      table.string('description', 2048).notNullable();
-      table.timestamp('release_date', { useTz: true });
-      table.integer('note', 1).notNullable().defaultTo(5);
+      table.string('name').notNullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
