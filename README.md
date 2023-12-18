@@ -38,3 +38,9 @@ Modifier un film par nom : PATCH ```/movie/:name```
 
 Supprimer un film par nom : DELETE ```/movie/:name```
 
+Créer un utilisateur : POST ```/auth/register```
+
+Se connecter avec un utilisateur : POST ```/auth/login```
+
+Déconnecter un utilisateur : POST ```/auth/logout```
+
