@@ -24,9 +24,9 @@ Route.group(() => {
   Route.get('/', 'MoviesController.getAllMovies');
   Route.get('/:name', 'MoviesController.getMovieByName');
   Route.get('/:category', 'MoviesController.getMoviesByCategory');
-  Route.post('/:name', 'MoviesController.createMovie');
-  Route.patch('/:name', 'MoviesController.editMovie');
-  Route.delete('/:name', 'MoviesController.removeMovie');
+  Route.post('/:name', 'MoviesController.createMovie').middleware(['admin']);
+  Route.patch('/:name', 'MoviesController.editMovie').middleware(['admin']);
+  Route.delete('/:name', 'MoviesController.removeMovie').middleware(['admin']);
 }).prefix('movie').middleware("auth")
 
 
