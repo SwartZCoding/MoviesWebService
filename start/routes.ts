@@ -38,5 +38,7 @@ Route.group(() => {
   Route.post('/register', 'AuthController.register');
   Route.post('/login', 'AuthController.login');
   Route.post('/logout', 'AuthController.logout').middleware(["auth"]);
+  Route.post('/refresh-token/:refreshToken/token', 'AuthController.refresh');
+  Route.get('/validate/:accessToken', 'AuthController.validate');
 }).prefix('auth')
 
