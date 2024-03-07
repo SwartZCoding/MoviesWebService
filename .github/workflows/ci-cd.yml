@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run linter
+      run: npm run lint
+
+    - name: Install Railway
+      run: npm i -g @railway/cli
+
+    - name: Deploy
+      run: railway up --service MoviesWebService
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+    - name: Version Management
+      id: versioning
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      uses: anothrNick/github-tag-action@1.36.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEFAULT_BUMP: patch
+        RELEASE_BRANCHES: master
+        WITH_V: true
+
+    - name: Create GitHub Release
+      if: steps.versioning.outputs.new_tag != ''
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.versioning.outputs.new_tag }}
+        release_name: Release ${{ steps.versioning.outputs.new_tag }}
+        body: |
+          Changes in this Release:
+          - Automated version bump to ${{ steps.versioning.outputs.new_tag }}
+        draft: false
+        prerelease: false
