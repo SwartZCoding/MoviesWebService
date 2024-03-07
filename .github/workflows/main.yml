@@ -24,3 +24,11 @@ jobs:
 
     - name: Run linter
       run: npm run lint
+
+    - name: Install Railway
+      run: npm i -g @railway/cli
+
+    - name: Deploy
+      run: railway up
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
