@@ -58,15 +58,13 @@ jobs:
         WITH_V: true
 
     - name: Release
-      if: steps.versioning.outputs.new_tag != ''
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      if: ${{ steps.versioning.outputs.new_tag != '' }}
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ steps.versioning.outputs.new_tag }}
-        release_name: Release ${{ steps.versioning.outputs.new_tag }}
+        name: Release ${{ steps.versioning.outputs.new_tag }}
         body: |
           Changes in this Release:
           - Automated version bump to ${{ steps.versioning.outputs.new_tag }}
-        draft: false
-        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
