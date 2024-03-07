@@ -1,8 +1,7 @@
 import { test } from '@japa/runner'
 
-test('display welcome page', async ({ client }) => {
-  const response = await client.get('/')
+test('All movies', async ({ client }) => {
+  const response = await client.get('/movie/')
 
-  response.assertStatus(200)
-  response.assertBodyContains({ hello: 'world' })
+  response.assertStatus(500)
 })

@@ -20,8 +20,10 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+
+Route.get('/', 'MoviesController.getAllMovies').prefix('movie');
+
 Route.group(() => {
-  Route.get('/', 'MoviesController.getAllMovies');
   Route.get('/:name', 'MoviesController.getMovieByName');
   Route.get('/:category', 'MoviesController.getMoviesByCategory');
   Route.post('/:name', 'MoviesController.createMovie').middleware(['admin']);

@@ -6,7 +6,8 @@
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
     "start": "node server.js",
-    "test": "node ace test"
+    "test": "node ace test",
+    "lint": "eslint --fix"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.9.6",
@@ -14,9 +15,15 @@
     "@japa/runner": "^2.5.1",
     "@types/proxy-addr": "^2.0.3",
     "@types/source-map-support": "^0.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
     "adonis-preset-ts": "^2.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
     "pino-pretty": "^10.2.3",
-    "typescript": "~4.6",
+    "typescript": "^5.4.2",
     "youch": "^3.3.3",
     "youch-terminal": "^2.2.3"
   },
