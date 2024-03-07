@@ -39,7 +39,7 @@ jobs:
     - name: Run linter
       run: npm run lint
 
-    - name: Install railway
+    - name: Install Railway
       run: npm i -g @railway/cli
 
     - name: Deployment
@@ -50,7 +50,7 @@ jobs:
     - name: Version management
       id: versioning
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      uses: anothrNick/github-tag-action@1.36.0
+      uses: anothrNick/github-tag-action@1.67.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DEFAULT_BUMP: patch
