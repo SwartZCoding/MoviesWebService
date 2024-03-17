@@ -19,7 +19,6 @@ export default class FillDatabase extends BaseCommand {
      * afterwards.
      */
     loadApp: true,
-
     /**
      * Set the following value to true, if you want this command to keep running until
      * you manually decide to exit the process. Don't forget to call
