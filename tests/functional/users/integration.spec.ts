@@ -4,6 +4,14 @@ import Role from "App/Enums/Role";
 
 test.group('Create user & create movie', () => {
   test('create user', async () => {
+
+    const alreadyExist = await User.findBy('email', 'email@email.com')
+
+    if(alreadyExist) {
+      console.log("User already exist.")
+      return
+    }
+
     const user = new User()
     user.email = 'email@email.com'
     user.password = 'secret'
