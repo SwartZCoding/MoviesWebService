@@ -21,7 +21,12 @@ test.group('Create user & create movie', () => {
 
   test('create a movie', async ({ client }) => {
     const user = await User.findBy('email', 'email@email.com')
-    const response = await client.post('/movie/NomTest').loginAs(user!)
+    const response = await client.post('/movie/NomTest').json({
+      name: "NomTest",
+      description: "Un super film de fou",
+      note: 4,
+      releaseDate: "2024-12-23"
+    }).loginAs(user!)
     console.log(response.body())
   })
 })
